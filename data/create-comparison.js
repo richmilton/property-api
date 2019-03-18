@@ -6,7 +6,7 @@ config.update(cfgUpdate);
 
 const docClient = new DynamoDB.DocumentClient();
 
-const insert = (comp, callback) => {
+const createComparison = (comp, onError, onSuccess) => {
   comp.id = `${Date.now()}`;
   const params = {
     TableName: "comparisons",
@@ -15,12 +15,12 @@ const insert = (comp, callback) => {
   docClient.put(params, (err) => {
     if (err) {
       console.error("Unable to add comparison", comp.projectName, ". Error JSON:", JSON.stringify(err, null, 2));
-      callback(500);
+      onError(err.errno);;
     } else {
       console.log("PutItem succeeded:", comp.projectName);
-      callback(comp);
+      onSuccess(comp);
     }
   });
 };
 
-module.exports = {load: insert};
+module.exports = { createComparison };

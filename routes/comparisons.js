@@ -1,34 +1,65 @@
 const express = require('express');
 const router = express.Router();
-const load = require('../data/load-comparison');
-const read = require('../data/read-comparison');
-const deleteComp = require('../data/delete-comparison');
+const {
+  createComparison,
+  getComparisons,
+  getComparison,
+  deleteComparison,
+} = require('../data')
 
 const setHeaders = (res) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
 };
 
+const errorMap = {
+  ECONNREFUSED: { status: 503, message: 'database not available' },
+  UNKNOWN: { status: 500, message: 'unknown internal server error' },
+};
+
+const getError = (errCode) => {
+  return errorMap[errCode] || errorMap.UNKNOWN;
+}
+
 router.get('/:id', (req, res) => {
   setHeaders(res);
   console.log(req.params.id);
-  read.get(req.params.id, res);
+  getComparison(req.params.id, res);
 });
 
 router.get('/', (req, res) => {
   setHeaders(res);
-  read.scan(res);
+  getComparisons(
+    (errCode) => {
+      const { status, message } = getError(errCode);
+      res.status(status).send(message);
+    },
+    (data) => res.send(data)
+  );
 });
 
 router.put('/', (req, res) => {
   setHeaders(res);
-  load.load(req.body, (comparison) => res.send(comparison));
+  createComparison(req.body,
+    (errCode) => {
+      const { status, message } = getError(errCode);
+      res.status(status).send(message);
+    },
+    (data) => res.send(data)
+  );
 });
 
 router.delete('/', (req, res) => {
   setHeaders(res);
-  deleteComp.deleteComp(req.body.id, (respCode) => res.send(respCode));
+  deleteComparison(
+    req.body.id,
+    (errCode) => {
+      const { status, message } = getError(errCode);
+      res.status(status).send(message);
+    },
+    (respCode) => res.send(respCode)
+  );
 });
 
 router.options('/', (req, res) => {
