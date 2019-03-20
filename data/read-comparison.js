@@ -1,5 +1,5 @@
 const { config, DynamoDB } = require("aws-sdk");
-const cfgUpdate = require('./aws-config');
+const { cfgUpdate } = require('./aws-config');
 
 config.update(cfgUpdate);
 
