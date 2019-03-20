@@ -1,9 +1,5 @@
-const { config, DynamoDB } = require('aws-sdk');
-const { cfgUpdate } = require('./aws-config');
-
-config.update(cfgUpdate);
-
-const docClient = new DynamoDB.DocumentClient();
+// const { config, DynamoDB } = require('aws-sdk');
+const { docClient } = require('./aws-config');
 
 const deleteComparison = (comparisonId, onError, onSuccess) => {
   console.log(comparisonId);

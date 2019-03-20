@@ -1,10 +1,6 @@
 //import { config, DynamoDB } from '../node_modules/aws-sdk';
-const { config, DynamoDB } = require("aws-sdk");
-const { cfgUpdate } = require('./aws-config');
-
-config.update(cfgUpdate);
-
-const docClient = new DynamoDB.DocumentClient();
+// const { config, DynamoDB } = require("aws-sdk");
+const { docClient } = require('./aws-config');
 
 const createComparison = (comp, onError, onSuccess) => {
   comp.id = `${Date.now()}`;

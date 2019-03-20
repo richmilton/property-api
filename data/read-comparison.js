@@ -1,9 +1,6 @@
-const { config, DynamoDB } = require("aws-sdk");
-const { cfgUpdate } = require('./aws-config');
+// const { config, DynamoDB } = require("aws-sdk");
+const { docClient } = require('./aws-config');
 
-config.update(cfgUpdate);
-
-const docClient = new DynamoDB.DocumentClient();
 //var table = "comparisons";
 let params = {
   TableName: "comparisons",
