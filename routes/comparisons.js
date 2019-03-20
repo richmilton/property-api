@@ -5,12 +5,16 @@ const {
   getComparisons,
   getComparison,
   deleteComparison,
-} = require('../data')
+} = require('../data');
 
-const setHeaders = (res) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
+const setHeaders = (res, req) => {
+  const whiteList = process.env.ORIGIN_WHITE_LIST.split('~');
+  const origin = req.get('origin');
+  if (whiteList.indexOf(origin) !== -1) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
+  }
 };
 
 const errorMap = {
@@ -20,7 +24,7 @@ const errorMap = {
 
 const getError = (errCode) => {
   return errorMap[errCode] || errorMap.UNKNOWN;
-}
+};
 
 router.get('/:id', (req, res) => {
   setHeaders(res);
@@ -29,7 +33,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  setHeaders(res);
+  setHeaders(res, req);
   getComparisons(
     (errCode) => {
       const { status, message } = getError(errCode);
