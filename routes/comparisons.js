@@ -27,7 +27,7 @@ const getError = (errCode) => {
 };
 
 router.get('/:id', (req, res) => {
-  setHeaders(res);
+  setHeaders(res, req);
   console.log(req.params.id);
   getComparison(req.params.id, res);
 });
@@ -44,7 +44,7 @@ router.get('/', (req, res) => {
 });
 
 router.put('/', (req, res) => {
-  setHeaders(res);
+  setHeaders(res, req);
   createComparison(req.body,
     (errCode) => {
       const { status, message } = getError(errCode);
@@ -55,7 +55,7 @@ router.put('/', (req, res) => {
 });
 
 router.delete('/', (req, res) => {
-  setHeaders(res);
+  setHeaders(res, req);
   deleteComparison(
     req.body.id,
     (errCode) => {
@@ -67,7 +67,7 @@ router.delete('/', (req, res) => {
 });
 
 router.options('/', (req, res) => {
-  setHeaders(res);
+  setHeaders(res, req);
   res.send(200);
 });
 
