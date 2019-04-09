@@ -8,6 +8,7 @@ require('dotenv').config();
 const app = require('../app');
 const debug = require('debug')('property-api:server');
 const https = require('https');
+const http = require('http');
 const path = require('path');
 const fs = require('fs');
 /**
@@ -19,16 +20,14 @@ const certOptions = {
   cert: fs.readFileSync(path.resolve('.ssl/server.crt'))
 };
 
-const port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+const port = normalizePort(process.env.APP_PORT || '3000');
 
-/**
- * Create HTTP server.
- */
+const runCommands = {
+  https: () => https.createServer(certOptions, app).listen(443),
+  http: () => http.createServer(app).listen(port),
+};
 
-// var server = http.createServer(app);
-
-const server = https.createServer(certOptions, app).listen(443);
+const server = runCommands[process.env.APP_PROTOCOL]();
 
 /**
  * Listen on provided port, on all network interfaces.
