@@ -44,12 +44,18 @@ router.get('/:id', (req, res) => {
 
 router.get('/user/:email', (req, res) => {
   if (setHeaders(res, req)) {
+    const emailDomain = req.params.email.split('@')[1];
     getComparisons(
       (errCode) => {
         const {status, message} = getError(errCode);
         res.status(status).send(message);
       },
-      (data) => res.send(data)
+      (data) => {
+        filteredData = {
+          Items: data.Items.filter(({ email }) => email.split('@')[1] === emailDomain)
+        };
+        res.send(filteredData);
+      }
     );
   }
 });
