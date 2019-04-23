@@ -3,7 +3,7 @@
 const { docClient } = require('./aws-config');
 
 const createComparison = (comp, onError, onSuccess) => {
-  comp.id = `${Date.now()}`;
+  comp.id = `${comp.email}#${Date.now()}`;
   const params = {
     TableName: "comparisons",
     Item: comp

@@ -8,7 +8,8 @@ const {
 } = require('../data');
 
 const setHeaders = (res, req, isOptions) => {
-  const { email = ''} = req.params.email ? req.params : req.body;
+  const { params, body } = req;
+  const { email = ''} = params.email ? params : body;
   const whiteList = process.env.ORIGIN_WHITE_LIST.split('~');
   const emailWhiteList = process.env.EMAIL_WHITE_LIST.split('~');
   if (!isOptions && emailWhiteList.indexOf(email) === -1) {
@@ -51,7 +52,7 @@ router.get('/user/:email', (req, res) => {
         res.status(status).send(message);
       },
       (data) => {
-        filteredData = {
+        const filteredData = {
           Items: data.Items.filter(({ email }) => email.split('@')[1] === emailDomain)
         };
         res.send(filteredData);
