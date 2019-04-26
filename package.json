@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "debug": "DEBUG=* nodemon ./bin/www"
+    "debug": "DEBUG=* nodemon ./bin/www",
+    "sls": "sls offline start"
   },
   "dependencies": {
     "aws-sdk": "^2.413.0",
