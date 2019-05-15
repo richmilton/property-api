@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "debug": "DEBUG=* nodemon ./bin/www",
-    "sls": "nodemon sls offline start"
+    "sls": "sls offline start"
   },
   "dependencies": {
     "aws-sdk": "^2.413.0",
